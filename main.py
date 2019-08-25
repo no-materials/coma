@@ -10,8 +10,10 @@ from facemesh import FaceData
 from opendr.topology import get_vert_connectivity
 import time
 
+# Google Drive dir
+gd_path = 'drive/My Drive/coma'
 # Processed data migrated to Google Drive
-processed_data_path = 'drive/My Drive/CoMA_PROCESSED_DATA'
+processed_data_path = gd_path + '/data/processed'
 
 parser = argparse.ArgumentParser(description='Tensorflow Trainer for Convolutional Mesh Autoencoders')
 parser.add_argument('--name', default='bareteeth', help='facial_motion| lfw ')
@@ -92,13 +94,14 @@ params['decay_steps'] = n_train / params['batch_size']
 model = models.coma(L=L, D=D, U=U, **params)
 
 if args.mode in ['test']:
-    if not os.path.exists('results'):
-        os.makedirs('results')
+    if not os.path.exists(os.path.join(gd_path, 'results')):
+        os.makedirs(os.path.join(gd_path, 'results'))
     predictions, loss = model.predict(X_test, X_test)
     print("L1 Loss= ", loss)
     euclidean_loss = np.mean(np.sqrt(np.sum((facedata.std * (predictions - facedata.vertices_test)) ** 2, axis=2)))
     print("Euclidean loss= ", euclidean_loss)
-    np.save('results/' + args.name + '_predictions', predictions)
+    np.save(gd_path + '/results/' + args.name + '_predictions',
+            predictions)  # TODO: system agnostic path via os.path.join
     if args.viz:
         from psbody.mesh import MeshViewers
 
@@ -112,9 +115,9 @@ elif args.mode in ['sample']:
 elif args.mode in ['latent']:
     visualize_latent_space(model, facedata)
 else:
-    if not os.path.exists(os.path.join('checkpoints', args.name)):
-        os.makedirs(os.path.join('checkpoints', args.name))
-    with open(os.path.join('checkpoints', args.name + 'params.json'), 'w') as fp:
+    if not os.path.exists(os.path.join(gd_path, 'checkpoints', args.name)):
+        os.makedirs(os.path.join(gd_path, 'checkpoints', args.name))
+    with open(os.path.join(gd_path, 'checkpoints', args.name + 'params.json'), 'w') as fp:
         saveparams = copy.deepcopy(params)
         saveparams['seed'] = args.seed
         json.dump(saveparams, fp)
