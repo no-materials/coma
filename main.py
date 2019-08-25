@@ -36,7 +36,7 @@ args = parser.parse_args()
 np.random.seed(args.seed)
 nz = args.nz
 print("Loading data .. ")
-reference_mesh_file = 'data/template.obj'
+reference_mesh_file = 'cloned-coma-repo/data/template.obj'
 facedata = FaceData(nVal=100, train_file=args.data + '/train.npy',
                     test_file=args.data + '/test.npy', reference_mesh_file=reference_mesh_file, pca_n_comp=nz)
 
