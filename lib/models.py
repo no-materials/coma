@@ -1,5 +1,4 @@
 from . import graph
-from main import gd_path
 
 import tensorflow as tf
 import sklearn
@@ -15,6 +14,8 @@ import tensorflow.contrib.keras as keras
 
 # Common methods for all models
 
+# Google Drive dir
+gd_path = 'drive/My Drive/coma'
 
 class base_model(object):
 
