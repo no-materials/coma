@@ -106,8 +106,9 @@ if args.mode in ['test']:
         from psbody.mesh import MeshViewers
 
         viewer_recon = MeshViewers(window_width=800, window_height=1000, shape=[5, 4], titlebar='Mesh Reconstructions')
+        predictions = predictions.reshape(predictions.shape[0], 1)
         for i in range(predictions.shape[0] / 20):
-            predicted_mesh = FaceData.vec2mesh(facedata, predictions[i * 20:(i + 1) * 20])
+            predicted_mesh = FaceData.vec2mesh(facedata, predictions)
             predicted_mesh.show()
             # facedata.show_mesh(viewer=viewer_recon, mesh_vecs=predictions_unperm[i * 20:(i + 1) * 20], figsize=(5, 4))
             time.sleep(0.1)
